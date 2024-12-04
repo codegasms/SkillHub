@@ -92,17 +92,6 @@ function Sidebar() {
                     Bidings
                   </Link>
 
-                  <Link
-                    to="/dashboard/earnings"
-                    className={`flex my-3 ${
-                      activeSection === "/dashboard/earnings"
-                        ? "bg-dark border-l-4 border-cyan-blue"
-                        : ""
-                    } px-4 py-2 hover:bg-dark text-cyan-blue`}
-                  >
-                    <GrMoney className="mr-3 text-xl" />
-                    Earnings
-                  </Link>
                 </>
               )}
 
@@ -117,6 +106,17 @@ function Sidebar() {
               >
                 <FaLaptopCode className="mr-3 text-xl" />
                 Projects
+              </Link>
+              <Link
+                    to="/dashboard/funds"
+                    className={`flex my-3 ${
+                      activeSection === "/dashboard/funds"
+                        ? "bg-dark border-l-4 border-cyan-blue"
+                        : ""
+                    } px-4 py-2 hover:bg-dark text-cyan-blue`}
+                  >
+                    <GrMoney className="mr-3 text-xl" />
+                    Funds
               </Link>
 
               <Link

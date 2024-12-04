@@ -14,6 +14,7 @@ import HybridDashboard from "./components/dashboard/HybridDashboard";
 import JobDetails from "./components/Jobs/JobDetails";
 import PostJob from "./components/Jobs/PostJob";
 import Features from "./components/Features/FeaturesPage";
+import Funds from "./components/Funds/Funds";
 import Jobs from "./components/JobsPage/Jobs";
 import LandingPage from "./components/LandingPage/LandingPage";
 import Marketplace from "./components/MarketPlace/MarketPlace";
@@ -83,6 +84,7 @@ function App() {
           />
           <Route path="/hybrid-dashboard" element={<HybridDashboard />} />
           <Route path="/dashboard/jobs" element={<Jobs />} />
+          <Route path="/dashboard/funds" element={<Funds />} />
           <Route path="/dashboard/bids" element={<Bids />} />
           <Route path="dashboard/projects" element={<Projects />} />
           <Route path="/about" element={<About />} />

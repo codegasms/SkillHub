@@ -17,7 +17,8 @@ export const initializeSocket = (token) => {
   }
 
   // Create a new socket connection with authentication and improved settings
-  socket = io("http://localhost:3000", {
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
+  socket = io(serverUrl, {
     auth: {
       token,
     },

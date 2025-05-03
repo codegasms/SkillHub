@@ -16,6 +16,7 @@ import DefaultAvatar from "./DefaultAvatar";
 
 const UserSearch = ({ query, onQueryChange, onUserSelect }) => {
   const { searchResults, loading, error } = useSelector((state) => state.chat);
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
   return (
     <Paper
@@ -101,7 +102,7 @@ const UserSearch = ({ query, onQueryChange, onUserSelect }) => {
               <ListItemAvatar>
                 {user.info?.profilePic ? (
                   <Avatar
-                    src={`http://localhost:3000/public${user.info.profilePic}`}
+                    src={`${serverUrl}/public${user.info.profilePic}`}
                     alt={user.name}
                   />
                 ) : (

@@ -22,6 +22,7 @@ const Navbar = () => {
   const accessToken = useSelector(selectAccessToken);
   const userProfile = useSelector(selectUserProfile);
   const userRole = useSelector(selectRole);
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
   useEffect(() => {
     if (accessToken) {
@@ -166,7 +167,7 @@ const Navbar = () => {
                         <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
                           {userProfile.info.profilePic ? (
                             <img
-                              src={`http://localhost:3000/public${userProfile.info.profilePic}`}
+                              src={`${serverUrl}/public${userProfile.info.profilePic}`}
                               alt={`${userProfile.name}'s profile`}
                               className="w-10 h-10 rounded-full"
                             />

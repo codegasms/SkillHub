@@ -18,6 +18,7 @@ const ProfilePage = () => {
   const [activeSection, setActiveSection] = useState("skills");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
   const currentUsername = useSelector(selectUsername);
 
@@ -101,7 +102,7 @@ const ProfilePage = () => {
               className="w-32 h-32 rounded-full border-4 border-gray-900 shadow-xl object-cover"
               src={
                 user.info?.profilePic
-                  ? `http://localhost:3000/public${user.info.profilePic}`
+                  ? `${serverUrl}/public${user.info.profilePic}`
                   : "/default-avatar.png"
               }
               alt={`${user.name || "User"}'s profile`}
@@ -239,7 +240,7 @@ const ProfilePage = () => {
                     {review.reviewer?.info?.profilePic ? (
                       <img
                         className="h-10 w-10 rounded-full border border-gray-700"
-                        src={`http://localhost:3000/public${review.reviewer.info.profilePic}`}
+                        src={`${serverUrl}/public${review.reviewer.info.profilePic}`}
                         alt={review.reviewer.name}
                       />
                     ) : (

@@ -21,6 +21,7 @@ import DefaultAvatar from "./DefaultAvatar";
 
 const ChatList = ({ chats, activeChatId, onChatSelect, onSearchToggle }) => {
   const [searchFocused, setSearchFocused] = useState(false);
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -109,7 +110,7 @@ const ChatList = ({ chats, activeChatId, onChatSelect, onSearchToggle }) => {
                   >
                     {chat.otherUser?.info?.profilePic ? (
                       <Avatar
-                        src={`http://localhost:3000/public${chat.otherUser.info.profilePic}`}
+                        src={`${serverUrl}/public${chat.otherUser.info.profilePic}`}
                         alt={chat.otherUser?.name}
                       />
                     ) : (

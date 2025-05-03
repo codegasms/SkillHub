@@ -3,14 +3,15 @@ import { FaPen } from "react-icons/fa";
 import PropTypes from "prop-types";
 
 const ImageUpload = ({ profilePicPath, setProfilePic }) => {
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
   const [imagePreview, setImagePreview] = useState(
-    profilePicPath ? `http://localhost:3000/public${profilePicPath}` : null
+    profilePicPath ? `${serverUrl}/public${profilePicPath}` : null
   );
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (profilePicPath) {
-      setImagePreview(`http://localhost:3000/public${profilePicPath}`);
+      setImagePreview(`${serverUrl}/public${profilePicPath}`);
     }
   }, [profilePicPath]);
 

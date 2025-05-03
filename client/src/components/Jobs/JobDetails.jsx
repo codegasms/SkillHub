@@ -7,7 +7,14 @@ import {
   selectUsername,
 } from "../../redux/Features/user/authSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faBriefcase, faTag, faList, faUser, faMoneyBill } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCircle,
+  faBriefcase,
+  faTag,
+  faList,
+  faUser,
+  faMoneyBill,
+} from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 
 const JobDetails = () => {
@@ -21,6 +28,8 @@ const JobDetails = () => {
 
   const role = useSelector(selectRole);
   const username = useSelector(selectUsername);
+
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
   const fetchBids = async () => {
     try {
@@ -81,14 +90,14 @@ const JobDetails = () => {
 
   const handleDeleteBid = async (bidId) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
       if (!token) {
         setError("Please login to delete your bid");
         return;
       }
 
       await axiosInstance.delete(`/bids/${bidId}`);
-      
+
       // Refresh bids after deletion
       await fetchBids();
       setSuccessMessage("Bid deleted successfully");
@@ -99,60 +108,68 @@ const JobDetails = () => {
     }
   };
 
-  if (error) return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="min-h-screen flex items-center justify-center"
-    >
-      <div className="bg-red-500/10 text-red-500 p-6 rounded-lg text-center max-w-md">
-        <h2 className="text-2xl font-bold mb-2">Error</h2>
-        <p>{error}</p>
-      </div>
-    </motion.div>
-  );
-  
-  if (!job) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse flex space-x-4">
-        <div className="h-12 w-12 bg-gray-700 rounded-full"></div>
-        <div className="space-y-4">
-          <div className="h-4 bg-gray-700 rounded w-64"></div>
-          <div className="h-4 bg-gray-700 rounded w-52"></div>
+  if (error)
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="min-h-screen flex items-center justify-center"
+      >
+        <div className="bg-red-500/10 text-red-500 p-6 rounded-lg text-center max-w-md">
+          <h2 className="text-2xl font-bold mb-2">Error</h2>
+          <p>{error}</p>
+        </div>
+      </motion.div>
+    );
+
+  if (!job)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse flex space-x-4">
+          <div className="h-12 w-12 bg-gray-700 rounded-full"></div>
+          <div className="space-y-4">
+            <div className="h-4 bg-gray-700 rounded w-64"></div>
+            <div className="h-4 bg-gray-700 rounded w-52"></div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 
   // Get the accepted bid if it exists
   const acceptedBid = bids.find((bid) => bid.status === "accepted");
 
   return (
     <div className="min-h-screen text-white p-4 md:p-8">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
         {/* Job Header Section */}
         <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-xl mb-6">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
           >
             {job.title}
           </motion.h1>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <p className="text-lg text-gray-300 leading-relaxed">{job.description}</p>
-              
+              <p className="text-lg text-gray-300 leading-relaxed">
+                {job.description}
+              </p>
+
               <div className="flex items-center space-x-2 text-gray-300">
-                <FontAwesomeIcon icon={faMoneyBill} className="text-green-400" />
+                <FontAwesomeIcon
+                  icon={faMoneyBill}
+                  className="text-green-400"
+                />
                 <span className="font-semibold">Budget:</span>
                 <span className="bg-green-500/10 text-green-400 px-3 py-1 rounded-full">
-                  ₹{job.budget.min.toLocaleString()} - ₹{job.budget.max.toLocaleString()}
+                  ₹{job.budget.min.toLocaleString()} - ₹
+                  {job.budget.max.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -165,7 +182,7 @@ const JobDetails = () => {
               <div className="flex items-center p-4 bg-gray-700/50 rounded-xl">
                 {job.employer.info.profilePic ? (
                   <img
-                    src={`http://localhost:3000/public${job.employer.info.profilePic}`}
+                    src={`${serverUrl}/public${job.employer.info.profilePic}`}
                     alt={`${job.employer.name}'s profile`}
                     className="w-12 h-12 rounded-full mr-3 border-2 border-blue-400"
                   />
@@ -191,7 +208,7 @@ const JobDetails = () => {
 
         {/* Skills and Categories Section */}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl"
@@ -212,7 +229,7 @@ const JobDetails = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl"
@@ -236,17 +253,19 @@ const JobDetails = () => {
 
         {/* Accepted Bid Section */}
         {acceptedBid && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-green-500/10 p-6 rounded-2xl mb-6"
           >
-            <h2 className="text-2xl font-bold mb-4 text-green-400">Accepted Bid</h2>
+            <h2 className="text-2xl font-bold mb-4 text-green-400">
+              Accepted Bid
+            </h2>
             <div className="flex items-center justify-between bg-gray-800/50 p-4 rounded-xl">
               <div className="flex items-center space-x-4">
                 {acceptedBid.freelancer.info.profilePic ? (
                   <img
-                    src={`http://localhost:3000/public${acceptedBid.freelancer.info.profilePic}`}
+                    src={`${serverUrl}/public${acceptedBid.freelancer.info.profilePic}`}
                     alt={`${acceptedBid.freelancer.name}'s profile`}
                     className="w-12 h-12 rounded-full border-2 border-green-400"
                   />
@@ -269,7 +288,9 @@ const JobDetails = () => {
               <div className="flex items-center space-x-4">
                 <div className="text-right">
                   <p className="text-sm text-gray-400">Bid Amount</p>
-                  <p className="text-xl font-bold text-green-400">₹{acceptedBid.amount.toLocaleString()}</p>
+                  <p className="text-xl font-bold text-green-400">
+                    ₹{acceptedBid.amount.toLocaleString()}
+                  </p>
                 </div>
                 <span className="bg-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium">
                   Accepted
@@ -283,7 +304,7 @@ const JobDetails = () => {
         {(role === "hybrid" || role === "freelancer") &&
           job.employer.username !== username &&
           !job.bidAccepted && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl mb-6"
@@ -309,7 +330,9 @@ const JobDetails = () => {
               )}
               <div className="flex items-center gap-4">
                 <div className="relative flex-grow">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">₹</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                    ₹
+                  </span>
                   <input
                     type="number"
                     value={bidAmount}
@@ -334,7 +357,7 @@ const JobDetails = () => {
           )}
 
         {/* Other Bids Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl"
@@ -343,7 +366,7 @@ const JobDetails = () => {
             <FontAwesomeIcon icon={faList} className="text-blue-400" />
             <h2 className="text-2xl font-bold">Other Bids</h2>
           </div>
-          
+
           {bids.length > 0 ? (
             <div className="space-y-4">
               {bids
@@ -358,7 +381,7 @@ const JobDetails = () => {
                     <div className="flex items-center space-x-4">
                       {bid.freelancer.info.profilePic ? (
                         <img
-                          src={`http://localhost:3000/public${bid.freelancer.info.profilePic}`}
+                          src={`${serverUrl}/public${bid.freelancer.info.profilePic}`}
                           alt={`${bid.freelancer.name}'s profile`}
                           className="w-10 h-10 rounded-full border border-gray-600"
                         />
@@ -378,13 +401,15 @@ const JobDetails = () => {
                         <p className="text-sm text-gray-400">Freelancer</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
                         <p className="text-sm text-gray-400">Bid Amount</p>
-                        <p className="text-lg font-semibold text-yellow-400">₹{bid.amount.toLocaleString()}</p>
+                        <p className="text-lg font-semibold text-yellow-400">
+                          ₹{bid.amount.toLocaleString()}
+                        </p>
                       </div>
-                      
+
                       <span
                         className={`px-4 py-2 rounded-full text-sm font-medium ${
                           bid.status === "pending"
@@ -392,18 +417,20 @@ const JobDetails = () => {
                             : "bg-red-500/20 text-red-400"
                         }`}
                       >
-                        {bid.status.charAt(0).toUpperCase() + bid.status.slice(1)}
+                        {bid.status.charAt(0).toUpperCase() +
+                          bid.status.slice(1)}
                       </span>
-                      
-                      {bid.freelancer.username === username && bid.status === "pending" && (
-                        <button
-                          onClick={() => handleDeleteBid(bid._id)}
-                          className="bg-red-500/10 text-red-400 px-4 py-2 rounded-xl font-medium hover:bg-red-500/20 transition-all"
-                        >
-                          Delete Bid
-                        </button>
-                      )}
-                      
+
+                      {bid.freelancer.username === username &&
+                        bid.status === "pending" && (
+                          <button
+                            onClick={() => handleDeleteBid(bid._id)}
+                            className="bg-red-500/10 text-red-400 px-4 py-2 rounded-xl font-medium hover:bg-red-500/20 transition-all"
+                          >
+                            Delete Bid
+                          </button>
+                        )}
+
                       {job.employer.username === username &&
                         bid.status === "pending" &&
                         !job.bidAccepted && (

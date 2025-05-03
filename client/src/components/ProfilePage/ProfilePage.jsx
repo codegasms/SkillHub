@@ -94,7 +94,7 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-gray-900">
       {/* Hero Section */}
       <div className="relative h-64 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900">
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10"></div>
+        {/* <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10"></div> */}
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
         <div className="absolute -bottom-16 left-1/2 -translate-x-1/2">
           <div className="relative">

@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: skillhub-api
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - SERVER_URL=${SERVER_URL}
+      - CLIENT_URL=${CLIENT_URL}
+      - PORT=${PORT}
+      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_DBNAME=${MONGODB_DBNAME}
+    volumes:
+      - ./public:/usr/src/app/public
+      - ./log:/usr/src/app/log
+    restart: unless-stopped

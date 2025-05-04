@@ -1,3 +1,4 @@
+
 version: "3.8"
 
 services:
@@ -17,12 +18,25 @@ services:
       - MONGODB_DBNAME=${MONGODB_DBNAME}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - SOLR_HOST=solr
+      - SOLR_PORT=8983
     volumes:
       - ./public:/usr/src/app/public
       - ./log:/usr/src/app/log
     restart: unless-stopped
     depends_on:
-      - redis
+      redis: {}
+      solr:
+        condition: service_healthy
+    command: >
+      bash -c "
+        echo 'Waiting for services to be ready...' &&
+        sleep 10 &&
+        echo 'Indexing data to Solr...' &&
+        node scripts/indexSolr.js &&
+        echo 'Starting application...' &&
+        npm start
+      "
 
   redis:
     image: redis:alpine
@@ -34,15 +48,24 @@ services:
     restart: unless-stopped
 
   solr:
-    image: solr:latest
+    image: solr:8.11-slim-alpine-3.15
     container_name: skillhub-solr
     ports:
       - "8983:8983"
     volumes:
       - solr_data:/var/solr
     command:
-      - solr-precreate
-      - users_core
+      - bash
+      - -c
+      - >
+        precreate-core users_core &&
+        precreate-core jobs_core &&
+        exec solr -f
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8983/solr/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   redis_data:

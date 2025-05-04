@@ -61,6 +61,8 @@ services:
         precreate-core users_core &&
         precreate-core jobs_core &&
         exec solr -f
+    environment:
+      - SOLR_OPTS=-Dsolr.jetty.host=0.0.0.0 -Dcors.enabled=true -Dcors.allow-origin=https://skill-hub-eight.vercel.app/
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8983/solr/"]
       interval: 10s

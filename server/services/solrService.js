@@ -163,6 +163,14 @@ const searchUsers = async (query, options = {}) => {
 // Search jobs
 const searchJobs = async (query, options = {}) => {
   try {
+    // Check if Solr is available by pinging it
+    try {
+      await jobsClient.ping();
+    } catch (pingError) {
+      console.error('Solr ping failed:', pingError);
+      throw new Error('Solr service unavailable');
+    }
+    
     // Build query parameters directly
     let queryParams = {
       q: '*:*', // Default to match all
@@ -185,15 +193,16 @@ const searchJobs = async (query, options = {}) => {
       
       Object.entries(options.filters).forEach(([field, value]) => {
         if (Array.isArray(value)) {
-          // Handle array values (like skills or categories)
-          const filterValues = value.map(val => `${field}:"${val}"`);
-          filterQueries.push(filterValues.join(' OR '));
-        } else if (field.includes('budget_min')) {
-          filterQueries.push(`${field}`);
-        } else if (field.includes('budget_max')) {
-          filterQueries.push(`${field}`);
-        } else {
-          filterQueries.push(`${field}:"${value}"`);
+          // Handle array values (like skills)
+          value.forEach(val => {
+            filterQueries.push(`${field}:${val}`);
+          });
+        } else if (value && typeof value === 'string' && !field.includes('[')) {
+          // Regular string filters
+          filterQueries.push(`${field}:${value}`);
+        } else if (field.includes('[')) {
+          // Range queries are already formatted correctly
+          filterQueries.push(field);
         }
       });
       
@@ -217,7 +226,14 @@ const searchJobs = async (query, options = {}) => {
     
     console.log('Solr query params:', queryParams);
     
-    const result = await jobsClient.search(queryParams);
+    // Set a timeout for the Solr query
+    const result = await Promise.race([
+      jobsClient.search(queryParams),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Solr query timeout')), 5000)
+      )
+    ]);
+    
     return result.response;
   } catch (error) {
     console.error('Error searching jobs in Solr:', error);
@@ -233,5 +249,6 @@ module.exports = {
   searchUsers,
   searchJobs
 };
+
 
 

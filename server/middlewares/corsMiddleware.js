@@ -6,7 +6,7 @@ const SERVER_URL = process.env.SERVER_URL || "http://localhost:3000";
 
 // Default CORS options
 const defaultCorsOptions = {
-  origin: [CLIENT_URL, SERVER_URL], // Default frontend URL
+  origin: [CLIENT_URL, SERVER_URL,"https://skill-hub-eight.vercel.app/"], // Default frontend URL
   credentials: true, // Allow credentials
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
